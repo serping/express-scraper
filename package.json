@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon",
-    "start": "node copy-files.js && node esbuild.config.js",
+    "start": "npx nodemon",
     "build": "npx tsup app --clean --format cjs --env.NODE_ENV production --env.DEPLOYMENT_ENV vercel && node copy-files.js",
     "add-build": "git add dist",
     "cheerio-tree:generate": "npx tsx bin/generate.ts",
