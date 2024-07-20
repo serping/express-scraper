@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
 
-dotenv.config();
-
 export const authByApiKey = (req: Request, res: Response, next: NextFunction) => {
-  let { token } = req.query;
+  let { token } = req.query as { token: string };
   const apiTokenHeader = req.headers['x-api-key'] as string;
   const apiToken = process.env.SECRET_API_KEY!;
 
