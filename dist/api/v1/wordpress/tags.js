@@ -126,8 +126,8 @@ var wordpressTags = async (req, res) => {
       url
     });
     const { statusCode, body } = await gotScraping(options);
-    const loadtime = ((Date.now() - startTime) / 1e3).toFixed(6);
-    res.setHeader("x-scraping-loadtime", loadtime);
+    const loadtime = ((Date.now() - startTime) / 1e3).toFixed(3);
+    res.setHeader("x-page-loadtime", loadtime + "s");
     if (statusCode !== 200) {
       return res.status(statusCode).json({ error: "StatuError", body });
     }
