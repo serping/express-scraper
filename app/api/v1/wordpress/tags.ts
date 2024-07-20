@@ -1,16 +1,16 @@
 import { type Device, scrapingOptions } from '@/app/config';
-import { proxysitesAiCategoryConfig } from '@/app/lib/cheerio-tree';
+import { wordpressComTagsConfig } from '@/app/lib/cheerio-tree';
 import CheerioTree from 'cheerio-tree';
 import { Request, Response } from 'express';
 
 /**
  * 
  * Test Your Scraping Now!
- * http://localhost:3000/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type
+ * http://localhost:3000/api/v1/wordpress.com/tags?url=https://wordpress.com/tags
  * 
  * @returns 
  */
-export const proxysiteAiCategory = async (req: Request, res: Response) => {
+export const wordpressTags = async (req: Request, res: Response) => {
   const startTime = Date.now();
   const { url, locale = "en", device = "desktop" } = req.query as {
     url: string;
@@ -18,13 +18,12 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
     device?: Device
   };
   if (!url) return res.status(500).json({ message: "url is null" });
-
   const decodedUrl = decodeURIComponent(url);
   const { gotScraping } = await import('got-scraping');
 
   try {
 
-    if (!new RegExp(proxysitesAiCategoryConfig.tree.url.match).test(decodedUrl)) {
+    if (!new RegExp(wordpressComTagsConfig.tree.url.match).test(decodedUrl)) {
       return res.status(500).json({ message: "url does not match", status: "failed" });
     }
 
@@ -42,7 +41,7 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
     const tree = new CheerioTree({ body });
 
     // parseing
-    const data = tree.parse({ config: proxysitesAiCategoryConfig });
+    const data = tree.parse({ config: wordpressComTagsConfig });
 
     // runtime
     const endTime = Date.now();

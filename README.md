@@ -17,6 +17,13 @@ Now, Try Your Fist Api Scraper:
 
 <http://localhost:3000/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type>
 
+<http://localhost:3000/api/v1/wordpress.com/tags?url=https://wordpress.com/tags>
+
+Try Online:
+
+<https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type&token=expressapikey>
+<https://express-scraper-api.vercel.app/api/v1/wordpress.com/tags?url=https://wordpress.com/tags&token=expressapikey>
+
 ## Create Your YAML
 
 For example: data/wordpressCom/tags.yml
