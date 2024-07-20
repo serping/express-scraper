@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -10,6 +11,10 @@ var __esm = (fn, res) => function __init() {
 };
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
@@ -27,6 +32,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // node_modules/picomatch/lib/constants.js
 var require_constants = __commonJS({
@@ -3971,7 +3977,7 @@ var require_nodefs_handler = __commonJS({
 var fsevents_default;
 var init_fsevents = __esm({
   "node_modules/fsevents/fsevents.node"() {
-    fsevents_default = "./fsevents-X6WP4TKM.node";
+    fsevents_default = "../fsevents-X6WP4TKM.node";
   }
 });
 
@@ -5204,202 +5210,20 @@ var require_chokidar = __commonJS({
   }
 });
 
-// app/index.ts
-var import_debug = __toESM(require("debug"));
-var import_dotenv = __toESM(require("dotenv"));
-var import_http = __toESM(require("http"));
-
-// app/config.ts
-var scrapingOptions = ({
-  url,
-  locale = "en",
-  device = "desktop",
-  timeout = 6e3
-}) => {
-  const options = {
-    url,
-    timeout: { request: timeout },
-    headerGeneratorOptions: {
-      locales: [locale],
-      device: [device]
-    }
-  };
-  if (process.env.DEV_PROXYY) {
-    options["proxyUrl"] = process.env.DEV_PROXYY;
-  }
-  if (process.env.PROXYY) {
-    options["proxyUrl"] = process.env.PROXYY;
-  }
-  return options;
-};
-
-// app/lib/cheerio-tree/proxysitesAi-category.ts
-var proxysitesAiCategoryConfig = {
-  "tree": {
-    "url": {
-      "match": "https://www.proxysites.ai/category/.*"
-    },
-    "nodes": {
-      "title": {
-        "selector": "title"
-      },
-      "topics": {
-        "wrapper": {
-          "position": true,
-          "list": true,
-          "selector": 'main > div.row > div[class="col"], div#content > main > div > div.h5',
-          "other_types": [
-            {
-              "name": "with_sites",
-              "validate": {
-                "selector": '> a:not([role="button"])'
-              }
-            }
-          ],
-          "with_sites": {
-            "name": {
-              "selector": " > a"
-            },
-            "link": {
-              "selector": " > a",
-              "attr": "href"
-            }
-          },
-          "normal": {
-            "name": {
-              "selector": "div.col > a span:nth-child(1)"
-            },
-            "link": {
-              "selector": "div.col > a",
-              "attr": "href"
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-// app/lib/cheerio-tree/wordpressCom-tags.ts
-var wordpressComTagsConfig = {
-  "tree": {
-    "url": {
-      "match": "https://wordpress.com/tags"
-    },
-    "nodes": {
-      "trending": {
-        "wrapper": {
-          "list": true,
-          "selector": "div.trending-tags__container .trending-tags__column",
-          "normal": {
-            "tag": {
-              "selector": "a .trending-tags__title"
-            },
-            "link": {
-              "selector": "a",
-              "attr": "href",
-              "after_regular": [
-                {
-                  "regex": "^(.*)$",
-                  "replace": "https://wordpress.com$1"
-                }
-              ]
-            },
-            "count": {
-              "to_i": null,
-              "selector": ".trending-tags__count",
-              "after_regular": [
-                {
-                  "regex": "K",
-                  "replace": "000"
-                },
-                {
-                  "regex": "M",
-                  "replace": "000000"
-                },
-                {
-                  "regex": "[^\\d]",
-                  "replace": null
-                }
-              ]
-            }
-          }
-        }
-      }
-    }
-  }
-};
-
-// app/api/v1/proxysites.ai/category.ts
-var import_cheerio_tree2 = __toESM(require("cheerio-tree"));
-var proxysiteAiCategory = async (req, res) => {
-  const startTime = Date.now();
-  const { url, locale = "en", device = "desktop" } = req.query;
-  if (!url) return res.status(500).json({ message: "url is null" });
-  const decodedUrl = decodeURIComponent(url);
-  const { gotScraping } = await import("got-scraping");
-  try {
-    if (!new RegExp(proxysitesAiCategoryConfig.tree.url.match).test(decodedUrl)) {
-      return res.status(500).json({ message: "url does not match", status: "failed" });
-    }
-    const options = scrapingOptions({
-      locale,
-      device,
-      url
-    });
-    const { statusCode, body } = await gotScraping(options);
-    if (statusCode !== 200) {
-      return res.status(statusCode).json({ error: "StatuError", body });
-    }
-    const tree = new import_cheerio_tree2.default({ body });
-    const data = tree.parse({ config: proxysitesAiCategoryConfig });
-    const endTime = Date.now();
-    const executionTime = ((endTime - startTime) / 1e3).toFixed(6);
-    res.setHeader("x-express-runtime", executionTime);
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return res.status(500).json({ error });
-  }
-};
-
-// app/api/v1/wordpress/tags.ts
-var import_cheerio_tree4 = __toESM(require("cheerio-tree"));
-var wordpressTags = async (req, res) => {
-  const startTime = Date.now();
-  const { url, locale = "en", device = "desktop" } = req.query;
-  if (!url) return res.status(500).json({ message: "url is null" });
-  const decodedUrl = decodeURIComponent(url);
-  const { gotScraping } = await import("got-scraping");
-  try {
-    if (!new RegExp(wordpressComTagsConfig.tree.url.match).test(decodedUrl)) {
-      return res.status(500).json({ message: "url does not match", status: "failed" });
-    }
-    const options = scrapingOptions({
-      locale,
-      device,
-      url
-    });
-    const { statusCode, body } = await gotScraping(options);
-    if (statusCode !== 200) {
-      return res.status(statusCode).json({ error: "StatuError", body });
-    }
-    const tree = new import_cheerio_tree4.default({ body });
-    const data = tree.parse({ config: wordpressComTagsConfig });
-    const endTime = Date.now();
-    const executionTime = ((endTime - startTime) / 1e3).toFixed(6);
-    res.setHeader("x-express-runtime", executionTime);
-    return res.status(200).json(data);
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return res.status(500).json({ error });
-  }
-};
-
 // app/lib/watcher.ts
+var watcher_exports = {};
+__export(watcher_exports, {
+  dataDir: () => dataDir,
+  runCommand: () => runCommand,
+  startWatcher: () => startWatcher,
+  watcher: () => watcher
+});
+module.exports = __toCommonJS(watcher_exports);
+var import_child_process = require("child_process");
 var import_chokidar = __toESM(require_chokidar());
 var import_path = __toESM(require("path"));
 var dataDir = import_path.default.join(process.cwd(), "data");
+var command = "npm run cheerio-tree:generate";
 var watcher = import_chokidar.default.watch(dataDir, {
   persistent: true,
   ignoreInitial: true,
@@ -5410,100 +5234,36 @@ var watcher = import_chokidar.default.watch(dataDir, {
     pollInterval: 100
   }
 });
-
-// app/app.ts
-var import_express = __toESM(require("express"));
-var import_morgan = require("morgan");
-
-// app/middleware/authByApiKey.ts
-var authByApiKey = (req, res, next) => {
-  let { token } = req.query;
-  const apiTokenHeader = req.headers["x-api-key"];
-  const apiToken = process.env.SECRET_API_KEY;
-  console.log("Query:", req.query);
-  if (!token) {
-    token = apiTokenHeader;
-  }
-  if (!token) {
-    return res.status(403).json({ error: "Unauthorized", message: "Missing x-api-key" });
-  }
-  if (apiToken !== token) {
-    return res.status(403).json({ error: "Unauthorized", message: "x-api-key not match" });
-  }
-  delete req.headers["x-api-key"];
-  next();
-};
-
-// app/app.ts
-var app = (0, import_express.default)();
-if (false) {
-  app.use(logger("dev"));
-  startWatcher();
-} else {
-  app.use(authByApiKey);
-}
-app.use(import_express.default.json());
-app.use(import_express.default.urlencoded({ extended: false }));
-app.use("/api/v1/wordpress.com/tags", wordpressTags);
-app.use("/api/v1/proxysites.ai/category", proxysiteAiCategory);
-var app_default = app;
-
-// app/index.ts
-import_dotenv.default.config();
-var serverDebug = (0, import_debug.default)("starter:server");
-var serverStarted = false;
-var DEFAULT_PORT = 3e3;
-var port = normalizePort(process.env.PORT || DEFAULT_PORT.toString());
-app_default.set("port", port);
-var server = import_http.default.createServer(app_default);
-startServer(port);
-function startServer(port2) {
-  server.listen(port2);
-  server.on("error", (error) => onError(error, port2));
-  server.on("listening", onListening);
-}
-function normalizePort(val) {
-  const parsedPort = parseInt(val, 10);
-  if (isNaN(parsedPort)) {
-    return val;
-  }
-  if (parsedPort >= 0) {
-    return parsedPort;
-  }
-  return false;
-}
-function onError(error, port2) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-  const bind = typeof port2 === "string" ? "Pipe " + port2 : "Port " + port2;
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      const nextPort = (typeof port2 === "number" ? port2 : parseInt(port2)) + 1;
-      console.log(`Port ${port2} is in use, attempting to use next port: ${nextPort}`);
-      startServer(nextPort);
-      break;
-    default:
-      throw error;
-  }
-}
-function onListening() {
-  if (!serverStarted) {
-    serverStarted = true;
-    const addr = server.address();
-    if (addr && typeof addr === "object") {
-      const bind = "port " + addr.port;
-      const url = `http://127.0.0.1:${addr.port}`;
-      console.log(`Listening on ${bind}`);
-      console.info(`Server running at ${url}`);
-      serverDebug("Listening on " + bind);
+var runCommand = () => {
+  (0, import_child_process.exec)(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Command execution failed: ${error.message}`);
+      return;
     }
-  }
-}
+    if (stderr) {
+      console.error(`stderr: ${stderr}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+  });
+};
+var startWatcher = () => {
+  watcher.on("change", (path2) => {
+    console.log(`File ${path2} has been added`);
+    runCommand();
+  }).on("unlink", (path2) => {
+    console.log(`File ${path2} has been removed`);
+    runCommand();
+  });
+  console.log(`Watching for changes in ${dataDir}`);
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  dataDir,
+  runCommand,
+  startWatcher,
+  watcher
+});
 /*! Bundled license information:
 
 normalize-path/index.js:

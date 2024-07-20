@@ -11,6 +11,10 @@ var __esm = (fn, res) => function __init() {
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -27,6 +31,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // node_modules/picomatch/lib/constants.js
 var require_constants = __commonJS({
@@ -5204,10 +5209,12 @@ var require_chokidar = __commonJS({
   }
 });
 
-// app/index.ts
-var import_debug = __toESM(require("debug"));
-var import_dotenv = __toESM(require("dotenv"));
-var import_http = __toESM(require("http"));
+// app/app.ts
+var app_exports = {};
+__export(app_exports, {
+  default: () => app_default
+});
+module.exports = __toCommonJS(app_exports);
 
 // app/config.ts
 var scrapingOptions = ({
@@ -5447,63 +5454,6 @@ app.use(import_express.default.urlencoded({ extended: false }));
 app.use("/api/v1/wordpress.com/tags", wordpressTags);
 app.use("/api/v1/proxysites.ai/category", proxysiteAiCategory);
 var app_default = app;
-
-// app/index.ts
-import_dotenv.default.config();
-var serverDebug = (0, import_debug.default)("starter:server");
-var serverStarted = false;
-var DEFAULT_PORT = 3e3;
-var port = normalizePort(process.env.PORT || DEFAULT_PORT.toString());
-app_default.set("port", port);
-var server = import_http.default.createServer(app_default);
-startServer(port);
-function startServer(port2) {
-  server.listen(port2);
-  server.on("error", (error) => onError(error, port2));
-  server.on("listening", onListening);
-}
-function normalizePort(val) {
-  const parsedPort = parseInt(val, 10);
-  if (isNaN(parsedPort)) {
-    return val;
-  }
-  if (parsedPort >= 0) {
-    return parsedPort;
-  }
-  return false;
-}
-function onError(error, port2) {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-  const bind = typeof port2 === "string" ? "Pipe " + port2 : "Port " + port2;
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      const nextPort = (typeof port2 === "number" ? port2 : parseInt(port2)) + 1;
-      console.log(`Port ${port2} is in use, attempting to use next port: ${nextPort}`);
-      startServer(nextPort);
-      break;
-    default:
-      throw error;
-  }
-}
-function onListening() {
-  if (!serverStarted) {
-    serverStarted = true;
-    const addr = server.address();
-    if (addr && typeof addr === "object") {
-      const bind = "port " + addr.port;
-      const url = `http://127.0.0.1:${addr.port}`;
-      console.log(`Listening on ${bind}`);
-      console.info(`Server running at ${url}`);
-      serverDebug("Listening on " + bind);
-    }
-  }
-}
 /*! Bundled license information:
 
 normalize-path/index.js:
