@@ -29,7 +29,6 @@ var authByApiKey = (req, res, next) => {
   let { token } = req.query;
   const apiTokenHeader = req.headers["x-api-key"];
   const apiToken = process.env.SECRET_API_KEY;
-  console.log("Query:", req.query);
   if (!token) {
     token = apiTokenHeader;
   }

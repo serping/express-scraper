@@ -126,14 +126,13 @@ var wordpressTags = async (req, res) => {
       url
     });
     const { statusCode, body } = await gotScraping(options);
+    const loadtime = ((Date.now() - startTime) / 1e3).toFixed(6);
+    res.setHeader("x-scraping-loadtime", loadtime);
     if (statusCode !== 200) {
       return res.status(statusCode).json({ error: "StatuError", body });
     }
     const tree = new import_cheerio_tree2.default({ body });
     const data = tree.parse({ config: wordpressComTagsConfig });
-    const endTime = Date.now();
-    const executionTime = ((endTime - startTime) / 1e3).toFixed(6);
-    res.setHeader("x-express-runtime", executionTime);
     return res.status(200).json(data);
   } catch (error) {
     console.error("An error occurred:", error);
