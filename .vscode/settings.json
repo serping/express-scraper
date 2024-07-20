@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
+  },
+  "typescript.preferences.importModuleSpecifier": "shortest",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.debug": true
+}

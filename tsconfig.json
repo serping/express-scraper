@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "noEmit": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": false,
+    "baseUrl": "./",
+    "lib": ["esnext"],
+    "listEmittedFiles": false,
+    "listFiles": false,
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "noFallthroughCasesInSwitch": true,
+    "pretty": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "traceResolution": false,
+    "target": "esnext",
+    "module": "CommonJS",
+    "types": ["@types/node", "jest"],
+    "paths": {
+      "@/*": ["./*"]
+    },
+  },
+  "exclude": ["node_modules", "dist", "__tests__"],
+  "include": ["app/**/*.ts"]
+}

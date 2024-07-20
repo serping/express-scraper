@@ -1,0 +1,34 @@
+tree:
+  # URL Info 
+  url:
+    match: https://www.proxysites.ai/category/.*
+  nodes:
+    title:
+      selector: title
+    topics:
+      wrapper:
+        position: true
+        list: true
+        # main > div.row > div[class="col"] for normal; eg. https://www.proxysites.ai/category/city
+        # div#content > main > div > div.h5 for with_sites ; eg. https://www.proxysites.ai/category/proxy-type
+        selector: main > div.row > div[class="col"], div#content > main > div > div.h5
+        other_types:
+          - name: with_sites
+            validate:
+              # Base on wrapper.selector
+              # $('main > div.row > div[class="col"], div#content > main > div > div.h5').find('> a:not([role="button"])') 
+              # Be sure with_sites has no <a role="button"> Elements and normal has <a role="button"> Elements;
+              selector: '> a:not([role="button"])'
+        with_sites:
+          name:
+            selector: ' > a'
+          link:
+            selector: ' > a'
+            attr: href
+          
+        normal:
+          name:
+            selector: div.col > a span:nth-child(1)
+          link:
+            selector: div.col > a
+            attr: href
