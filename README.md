@@ -1,4 +1,6 @@
-# express scraper
+# Express Scraper API Build With Cheerio Tree
+
+[Cheerio Tree](https://github.com/serping/cheerio-tree) is a powerful utility built on [Cheerio](https://github.com/cheeriojs/cheerio), designed for efficient DOM parsing. It enables rapid conversion of HTML data into JSON format. When paired with YAML, it provides an intuitive and streamlined approach to data handling and transformation.
 
 ## Start
 
@@ -29,11 +31,13 @@ Online:
 
 ## Create Your YAML
 
-For example: data/wordpressCom/tags.yml
+For example: [data/wordpressCom/tags.yml](data/wordpressCom/tags.yml)
 
 Please use camelCase for folder and file naming.
 
-After saving the YAML file, it will be automatically converted to JSON in the development environment and saved as app/lib/cheerio-tree/wordpressCom-tags.ts.
+After saving the YAML file, it will be automatically converted to JSON in the development environment
+
+and saved as **app/lib/cheerio-tree/wordpressCom-tags.ts.**
 
 Make sure to configure the parsing settings in the predetermined format to avoid issues with file generation.
 
@@ -93,7 +97,7 @@ tree:
 
 ## Test
 
-Create your test at [__tests__](__tests__/)
+Create your test at [**tests**](__tests__/)
 
 ```bash
 pnpm test
