@@ -93,7 +93,7 @@ tree:
 
 ## Test
 
-Create your test in [__tests__](__tests__/CheerioTree.ts)
+Create your test at [__tests__](__tests__/)
 
 ```bash
 pnpm test
