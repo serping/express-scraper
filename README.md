@@ -95,6 +95,18 @@ tree:
             after_regular: *toI
 ```
 
+## Build
+
+```bash
+npm run build
+
+# or 
+# pnpm build
+
+git add dist && git commit -m  "build"
+
+```
+
 ## Test
 
 Create your test at [**tests**](__tests__/)
