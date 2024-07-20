@@ -65,5 +65,7 @@ tree:
                 link:
                   selector: a
                   attr: href
+                  after_regular:
+                    - <<: *addHost
           
           
