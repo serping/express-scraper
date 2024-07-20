@@ -48,5 +48,22 @@ tree:
             to_i:
             selector: .trending-tags__count
             after_regular: *toI
+    tags:
+      wrapper:
+        list: true
+        selector: div.alphabetic-tags__table
+        normal:
+          letter:
+            selector: h3
+          tags:
+            wrapper:
+              list: true
+              selector: div.alphabetic-tags__col
+              normal:
+                name:
+                  selector: a
+                link:
+                  selector: a
+                  attr: href
           
           
