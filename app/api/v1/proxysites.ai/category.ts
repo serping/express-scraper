@@ -38,7 +38,7 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
 
     // Load Time 
     const loadtime = ((Date.now() - startTime) / 1000).toFixed(3);
-    res.setHeader('x-scraping-loadtime', loadtime + "s");
+    res.setHeader('x-page-loadtime', loadtime + "s");
 
     if (statusCode !== 200) {
       return res.status(statusCode).json({ error: "StatuError", body });
