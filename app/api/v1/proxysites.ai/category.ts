@@ -40,6 +40,12 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
     if (process.env.DEV_PROXYY) {
       scrapingOptions["proxyUrl"] = process.env.DEV_PROXYY;
     }
+
+    // Production proxy
+    if (process.env.PROXYY) {
+      scrapingOptions["proxyUrl"] = process.env.PROXYY;
+    }
+
     const { statusCode, body } = await gotScraping(scrapingOptions);
 
     if (statusCode !== 200) {
