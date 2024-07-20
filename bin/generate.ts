@@ -101,15 +101,4 @@ fs.writeFileSync(`${cheerioTreePath}/index.ts`, cheerioTreeIndexContent, 'utf-8'
 
 
 console.log("Sites:", sites);
-console.info(`${siteFilePath} Saved!`);
-
-// for (const [site, item] of Object.entries(appConfig.sites)) {
-//   item.map(page => {
-//     const data = getSitesConfig({ site: site as ScrapingSite, page });
-//     if (!data.tree || !data.tree.nodes) throw new Error("YAML tree.nodes is not found");
-//     const content = `export const ${site}${capitalizeFirstLetter(page)}Config =  ${JSON.stringify({ tree: data.tree }, null, 2)}`
-//     const filePath = path.join(process.cwd(), `app/lib/cheerio-tree/${site}-${page}.ts`);
-//     fs.writeFileSync(filePath, content, 'utf-8');
-//     console.info(`${filePath} Saved!`)
-//   })
-// } 
+console.info(`${siteFilePath} Saved!\n`);
