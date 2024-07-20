@@ -36,18 +36,17 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
 
     const { statusCode, body } = await gotScraping(options);
 
+    // Load Time 
+    const loadtime = ((Date.now() - startTime) / 1000).toFixed(6);
+    res.setHeader('x-scraping-loadtime', loadtime);
+
     if (statusCode !== 200) {
       return res.status(statusCode).json({ error: "StatuError", body });
     }
-    const tree = new CheerioTree({ body });
+    const tree = new CheerioTree({ body, duration: true });
 
     // parseing
     const data = tree.parse({ config: proxysitesAiCategoryConfig });
-
-    // runtime
-    const endTime = Date.now();
-    const executionTime = ((endTime - startTime) / 1000).toFixed(6);
-    res.setHeader('x-express-runtime', executionTime);
 
     // render
     return res.status(200).json(data);

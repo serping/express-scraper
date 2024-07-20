@@ -4,9 +4,11 @@ import { startWatcher } from '@/app/lib/watcher';
 import express, { Application } from 'express';
 import logger from 'morgan';
 import { authByApiKey } from './middleware/authByApiKey';
+const responseTime = require('response-time');
 
 const app: Application = express();
 
+app.use(responseTime());
 if (process.env.NODE_ENV !== "production") {
   app.use(logger('dev'));
   startWatcher();
