@@ -13,7 +13,9 @@ pnpm dev
 
 ```
 
-Now, Try Your Fist Api Scraper <http://localhost:3000/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type>
+Now, Try Your Fist Api Scraper:
+
+<http://localhost:3000/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type>
 
 ## Create Your YAML
 
