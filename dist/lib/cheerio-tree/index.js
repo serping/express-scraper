@@ -175,7 +175,13 @@ var wordpressComTagsConfig = {
                   },
                   "link": {
                     "selector": "a",
-                    "attr": "href"
+                    "attr": "href",
+                    "after_regular": [
+                      {
+                        "regex": "^(.*)$",
+                        "replace": "https://wordpress.com$1"
+                      }
+                    ]
                   }
                 }
               }
