@@ -5,6 +5,9 @@ export const authByApiKey = (req: Request, res: Response, next: NextFunction) =>
   const apiTokenHeader = req.headers['x-api-key'] as string;
   const apiToken = process.env.SECRET_API_KEY!;
 
+
+  // Debug
+  console.log('Query:', req.query);
   if (!token) {
     token = apiTokenHeader;
   }
