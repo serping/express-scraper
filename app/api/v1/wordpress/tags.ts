@@ -36,8 +36,8 @@ export const wordpressTags = async (req: Request, res: Response) => {
     const { statusCode, body } = await gotScraping(options);
 
     // Load Time 
-    const loadtime = ((Date.now() - startTime) / 1000).toFixed(6);
-    res.setHeader('x-scraping-loadtime', loadtime);
+    const loadtime = ((Date.now() - startTime) / 1000).toFixed(3);
+    res.setHeader('x-scraping-loadtime', loadtime + "s");
 
     if (statusCode !== 200) {
       return res.status(statusCode).json({ error: "StatuError", body });
