@@ -103,6 +103,32 @@ var wordpressComTagsConfig = {
             }
           }
         }
+      },
+      "tags": {
+        "wrapper": {
+          "list": true,
+          "selector": "div.alphabetic-tags__table",
+          "normal": {
+            "letter": {
+              "selector": "h3"
+            },
+            "tags": {
+              "wrapper": {
+                "list": true,
+                "selector": "div.alphabetic-tags__col",
+                "normal": {
+                  "name": {
+                    "selector": "a"
+                  },
+                  "link": {
+                    "selector": "a",
+                    "attr": "href"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
