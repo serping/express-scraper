@@ -20,6 +20,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // app/site.ts
 var site_exports = {};
 __export(site_exports, {
+  scrapingGooglePages: () => scrapingGooglePages,
   scrapingProxysitesAiPages: () => scrapingProxysitesAiPages,
   scrapingSites: () => scrapingSites,
   scrapingWordpressComPages: () => scrapingWordpressComPages,
@@ -27,17 +28,20 @@ __export(site_exports, {
   sites: () => sites
 });
 module.exports = __toCommonJS(site_exports);
-var scrapingSites = ["proxysitesAi", "wordpressCom", "wordpressOrg"];
+var scrapingSites = ["google", "proxysitesAi", "wordpressCom", "wordpressOrg"];
+var scrapingGooglePages = ["desktopSerp"];
 var scrapingProxysitesAiPages = ["category", "topic"];
 var scrapingWordpressComPages = ["tags"];
 var scrapingWordpressOrgPages = ["documentation", "photos"];
 var sites = {
+  google: scrapingGooglePages,
   proxysitesAi: scrapingProxysitesAiPages,
   wordpressCom: scrapingWordpressComPages,
   wordpressOrg: scrapingWordpressOrgPages
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  scrapingGooglePages,
   scrapingProxysitesAiPages,
   scrapingSites,
   scrapingWordpressComPages,

@@ -27,7 +27,7 @@ __export(config_exports, {
 module.exports = __toCommonJS(config_exports);
 var devices = ["desktop", "mobile"];
 var appConfig = {
-  appName: "Express Scraper",
+  appName: "Express Scraper API",
   devices
 };
 var scrapingOptions = ({
@@ -47,8 +47,8 @@ var scrapingOptions = ({
   if (process.env.DEV_PROXYY) {
     options["proxyUrl"] = process.env.DEV_PROXYY;
   }
-  if (process.env.PROXYY) {
-    options["proxyUrl"] = process.env.PROXYY;
+  if (process.env.HTTP_PROXYY) {
+    options["proxyUrl"] = process.env.HTTP_PROXYY;
   }
   return options;
 };

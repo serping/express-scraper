@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,19 +17,46 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// app/lib/cheerio-tree/index.ts
-var cheerio_tree_exports = {};
-__export(cheerio_tree_exports, {
-  googleDesktopSerpConfig: () => googleDesktopSerpConfig,
-  proxysitesAiCategoryConfig: () => proxysitesAiCategoryConfig,
-  proxysitesAiTopicConfig: () => proxysitesAiTopicConfig,
-  wordpressComTagsConfig: () => wordpressComTagsConfig,
-  wordpressOrgDocumentationConfig: () => wordpressOrgDocumentationConfig,
-  wordpressOrgPhotosConfig: () => wordpressOrgPhotosConfig
+// app/api/v1/google/serp.ts
+var serp_exports = {};
+__export(serp_exports, {
+  googleSerp: () => googleSerp
 });
-module.exports = __toCommonJS(cheerio_tree_exports);
+module.exports = __toCommonJS(serp_exports);
+
+// app/config.ts
+var scrapingOptions = ({
+  url,
+  locale = "en",
+  device = "desktop",
+  timeout = 6e3
+}) => {
+  const options = {
+    url,
+    timeout: { request: timeout },
+    headerGeneratorOptions: {
+      locales: [locale],
+      device: [device]
+    }
+  };
+  if (process.env.DEV_PROXYY) {
+    options["proxyUrl"] = process.env.DEV_PROXYY;
+  }
+  if (process.env.HTTP_PROXYY) {
+    options["proxyUrl"] = process.env.HTTP_PROXYY;
+  }
+  return options;
+};
 
 // app/lib/cheerio-tree/google-desktopSerp.ts
 var googleDesktopSerpConfig = {
@@ -767,200 +796,43 @@ var googleDesktopSerpConfig = {
   }
 };
 
-// app/lib/cheerio-tree/proxysitesAi-category.ts
-var proxysitesAiCategoryConfig = {
-  "tree": {
-    "url": {
-      "match": "https://www.proxysites.ai/category/.*"
-    },
-    "nodes": {
-      "title": {
-        "selector": "title"
-      },
-      "topics": {
-        "wrapper": {
-          "position": true,
-          "list": true,
-          "selector": 'main > div.row > div[class="col"], div#content > main > div > div.h5',
-          "other_types": [
-            {
-              "name": "with_sites",
-              "validate": {
-                "selector": '> a:not([role="button"])'
-              }
-            }
-          ],
-          "with_sites": {
-            "name": {
-              "selector": " > a"
-            },
-            "link": {
-              "selector": " > a",
-              "attr": "href"
-            }
-          },
-          "normal": {
-            "name": {
-              "selector": "div.col > a span:nth-child(1)"
-            },
-            "link": {
-              "selector": "div.col > a",
-              "attr": "href"
-            }
-          }
-        }
-      }
+// app/api/v1/google/serp.ts
+var import_cheerio_tree2 = __toESM(require("cheerio-tree"));
+var googleSerp = async (req, res) => {
+  const startTime = Date.now();
+  const { q, locale = "en", device = "desktop" } = req.query;
+  const { gotScraping } = await import("got-scraping");
+  try {
+    if (!q) {
+      return res.status(500).json({ message: "q is null", status: "failed" });
     }
-  }
-};
-
-// app/lib/cheerio-tree/proxysitesAi-topic.ts
-var proxysitesAiTopicConfig = {
-  "tree": {
-    "url": {
-      "match": "https://www.proxysites.ai/topic/.*"
-    },
-    "nodes": {
-      "title": {
-        "selector": "title"
-      },
-      "sites": {
-        "wrapper": {
-          "list": true,
-          "selector": "div#collection article",
-          "normal": {
-            "name": {
-              "selector": "h3"
-            },
-            "link": {
-              "selector": "h3 a.text-nav",
-              "attr": "href"
-            },
-            "description": {
-              "selector": "div.line-clamp-2"
-            },
-            "tags": {
-              "selector": "div.d-flex.flex-wrap.align-items-center > span",
-              "is_array": true
-            }
-          }
-        }
-      }
+    delete req.query.locale;
+    delete req.query.device;
+    let serpUrl = "https://www.google.com/search?";
+    for (const [key, value] of Object.entries(req.query)) {
+      serpUrl += `${key}=${value}&`;
     }
-  }
-};
-
-// app/lib/cheerio-tree/wordpressCom-tags.ts
-var wordpressComTagsConfig = {
-  "tree": {
-    "url": {
-      "match": "https://wordpress.com/tags"
-    },
-    "nodes": {
-      "trending": {
-        "wrapper": {
-          "list": true,
-          "selector": "div.trending-tags__container .trending-tags__column",
-          "normal": {
-            "tag": {
-              "selector": "a .trending-tags__title"
-            },
-            "link": {
-              "selector": "a",
-              "attr": "href",
-              "after_regular": [
-                {
-                  "regex": "^(.*)$",
-                  "replace": "https://wordpress.com$1"
-                }
-              ]
-            },
-            "count": {
-              "to_i": null,
-              "selector": ".trending-tags__count",
-              "after_regular": [
-                {
-                  "regex": "K",
-                  "replace": "000"
-                },
-                {
-                  "regex": "M",
-                  "replace": "000000"
-                },
-                {
-                  "regex": "[^\\d]",
-                  "replace": null
-                }
-              ]
-            }
-          }
-        }
-      },
-      "tags": {
-        "wrapper": {
-          "list": true,
-          "selector": "div.alphabetic-tags__table",
-          "normal": {
-            "letter": {
-              "selector": "h3"
-            },
-            "tags": {
-              "wrapper": {
-                "list": true,
-                "selector": "div.alphabetic-tags__col",
-                "normal": {
-                  "name": {
-                    "selector": "a"
-                  },
-                  "link": {
-                    "selector": "a",
-                    "attr": "href",
-                    "after_regular": [
-                      {
-                        "regex": "^(.*)$",
-                        "replace": "https://wordpress.com$1"
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+    serpUrl += "ie=UTF-8";
+    const options = scrapingOptions({
+      locale,
+      device,
+      url: serpUrl
+    });
+    const { statusCode, body } = await gotScraping(options);
+    const loadtime = ((Date.now() - startTime) / 1e3).toFixed(3);
+    res.setHeader("x-page-loadtime", loadtime + "s");
+    if (statusCode !== 200) {
+      return res.status(statusCode).json({ error: "StatuError", statusCode, body });
     }
-  }
-};
-
-// app/lib/cheerio-tree/wordpressOrg-documentation.ts
-var wordpressOrgDocumentationConfig = {
-  "tree": {
-    "url": {
-      "match": "https://wordpress.org/documentation/"
-    },
-    "nodes": {
-      "articles": null
-    }
-  }
-};
-
-// app/lib/cheerio-tree/wordpressOrg-photos.ts
-var wordpressOrgPhotosConfig = {
-  "tree": {
-    "url": {
-      "match": "https://wordpress.org/photos/"
-    },
-    "nodes": {
-      "articles": null
-    }
+    const tree = new import_cheerio_tree2.default({ body, duration: true });
+    const data = tree.parse({ config: googleDesktopSerpConfig });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return res.status(500).json({ error });
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  googleDesktopSerpConfig,
-  proxysitesAiCategoryConfig,
-  proxysitesAiTopicConfig,
-  wordpressComTagsConfig,
-  wordpressOrgDocumentationConfig,
-  wordpressOrgPhotosConfig
+  googleSerp
 });
