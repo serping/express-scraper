@@ -135,7 +135,7 @@ SECRET_API_KEY=your_api_key
 HTTP_PROXY=
 ```
 
-### How use to my api?
+### How to use my api?
 
 You can use your API with two authentication methods: URL parameter and Header parameter. Here is how to use these two methods for authentication in detail.
 
