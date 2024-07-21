@@ -26,13 +26,13 @@ export const scrapingOptions = ({
     }
   }
   // local dev proxy
-  if (process.env.DEV_PROXYY) {
-    options["proxyUrl"] = process.env.DEV_PROXYY;
+  if (process.env.DEV_PROXY) {
+    options["proxyUrl"] = process.env.DEV_PROXY;
   }
 
   // Production proxy
-  if (process.env.HTTP_PROXYY) {
-    options["proxyUrl"] = process.env.HTTP_PROXYY;
+  if (process.env.HTTP_PROXY) {
+    options["proxyUrl"] = process.env.HTTP_PROXY;
   }
   return options
 }

@@ -132,7 +132,7 @@ You can deploy this project to Vercel with the following button:
 SECRET_API_KEY=your_api_key
 
 # You can find at https://www.proxysites.ai/
-HTTP_PROXYY=
+HTTP_PROXY=
 ```
 
 ### How use to my api?

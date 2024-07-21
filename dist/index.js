@@ -1772,7 +1772,7 @@ var require_readdirp = __commonJS({
 var require_normalize_path = __commonJS({
   "node_modules/normalize-path/index.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(path2, stripTrailing) {
+    module2.exports = function (path2, stripTrailing) {
       if (typeof path2 !== "string") {
         throw new TypeError("expected path to be a string");
       }
@@ -1887,7 +1887,7 @@ var require_is_glob = __commonJS({
     "use strict";
     var isExtglob = require_is_extglob();
     var chars = { "{": "}", "(": ")", "[": "]" };
-    var strictCheck = function(str) {
+    var strictCheck = function (str) {
       if (str[0] === "!") {
         return true;
       }
@@ -1969,7 +1969,7 @@ var require_is_glob = __commonJS({
       }
       return false;
     };
-    var relaxedCheck = function(str) {
+    var relaxedCheck = function (str) {
       if (str[0] === "!") {
         return true;
       }
@@ -2159,7 +2159,7 @@ var require_stringify = __commonJS({
 var require_is_number = __commonJS({
   "node_modules/is-number/index.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(num) {
+    module2.exports = function (num) {
       if (typeof num === "number") {
         return num - num === 0;
       }
@@ -2401,7 +2401,7 @@ var require_fill_range = __commonJS({
       let index = -1;
       if (value[0] === "-") value = value.slice(1);
       if (value === "0") return false;
-      while (value[++index] === "0") ;
+      while (value[++index] === "0");
       return index > 0;
     };
     var stringify = (start, end, options) => {
@@ -3850,11 +3850,11 @@ var require_nodefs_handler = __commonJS({
             resolve();
             previous.getChildren().filter((item) => {
               return item !== directory && !current.has(item) && // in case of intersecting globs;
-              // a path may have been filtered out of this readdir, but
-              // shouldn't be removed because it matches a different glob
-              (!wh.hasGlob || wh.filterPath({
-                fullPath: sysPath.resolve(directory, item)
-              }));
+                // a path may have been filtered out of this readdir, but
+                // shouldn't be removed because it matches a different glob
+                (!wh.hasGlob || wh.filterPath({
+                  fullPath: sysPath.resolve(directory, item)
+                }));
             }).forEach((item) => {
               this.fsw._remove(directory, item);
             });
@@ -5224,11 +5224,11 @@ var scrapingOptions = ({
       device: [device]
     }
   };
-  if (process.env.DEV_PROXYY) {
-    options["proxyUrl"] = process.env.DEV_PROXYY;
+  if (process.env.DEV_PROXY) {
+    options["proxyUrl"] = process.env.DEV_PROXY;
   }
-  if (process.env.HTTP_PROXYY) {
-    options["proxyUrl"] = process.env.HTTP_PROXYY;
+  if (process.env.HTTP_PROXY) {
+    options["proxyUrl"] = process.env.HTTP_PROXY;
   }
   return options;
 };
