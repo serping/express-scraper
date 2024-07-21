@@ -44,7 +44,7 @@ export const wordpressTags = async (req: Request, res: Response) => {
     }
     const tree = new CheerioTree({ body });
 
-    // parseing
+    // parsing
     const data = tree.parse({ config: wordpressComTagsConfig });
 
     // render

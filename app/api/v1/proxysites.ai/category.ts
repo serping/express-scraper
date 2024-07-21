@@ -45,7 +45,7 @@ export const proxysiteAiCategory = async (req: Request, res: Response) => {
     }
     const tree = new CheerioTree({ body, duration: true });
 
-    // parseing
+    // parsing
     const data = tree.parse({ config: proxysitesAiCategoryConfig });
 
     // render
