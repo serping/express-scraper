@@ -128,6 +128,122 @@ You can deploy this project to Vercel with the following button:
 ```bash
 # Config Your Api Key
 SECRET_API_KEY=your_api_key
+
+# You can find at https://www.proxysites.ai/
+HTTP_PROXYY=
+```
+
+### How use my api?
+
+You can use your API with two authentication methods: URL parameter and Header parameter. Here is how to use these two methods for authentication in detail.
+
+#### URL Param Authentication
+
+Add the token parameter to the request URL and set your API key as the parameter value. For example, if your API endpoint is <http://localhost:3000/api/v1/resource> and your API key is your_api_key, you can call the API like this:
+
+```bash
+curl "http://localhost:3000/api/v1/resource?token=your_api_key"
+```
+
+#### Header Authentication
+
+Add X-Api-Key to the request header and set your API key as the value. You can use the curl command to send a request with a custom header:
+
+```bash
+curl -H "X-Api-Key: your_api_key" "http://localhost:3000/api/v1/resource"
+```
+
+#### Examples
+
+Suppose you have an API endpoint <https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type>. You can authenticate using the following two methods:
+
+API Key: **expressapikey**
+
+##### 1. Using URL Param
+
+```sh
+curl "https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type&token=expressapikey"
+```
+
+##### 2. Using Header
+
+```sh
+curl  -H "X-Api-Key: expressapikey" "https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=https://www.proxysites.ai/category/proxy-type"
+```
+
+#### Summary
+
+**URL Param Authentication**: Add the `token` parameter to the request URL.
+
+**Header Authentication**: Add `X-Api-Key` to the request header.
+
+Choose the appropriate authentication method based on your needs and use case. Generally, using header authentication is more secure as it does not expose the key in the URL.
+
+#### Using in Code
+
+You can call the API in your code as follows:
+
+##### Using JavaScript (Fetch API)
+
+```javascript
+function urlEncode(url) {
+  return encodeURIComponent(url);
+}
+
+const encodedUrl = urlEncode('https://www.proxysites.ai/category/proxy-type');
+const apiKey = 'expressapikey';
+// Using URL Param
+fetch(`https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=${urlEncode}&token=${apiKey}`)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+// Using Header
+fetch(`https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category?url=${urlEncode}`, {
+  headers: {
+    'X-Api-Key': apiKey
+  }
+})
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+##### Python (requests)
+
+```python
+
+import requests
+import urllib.parse
+
+def url_encode(url):
+    return urllib.parse.quote(url, safe='')
+
+encoded_url = url_encode('https://www.proxysites.ai/category/proxy-type')
+api_key = 'expressapikey'
+
+# Using URL Param
+url_param_response = requests.get(
+    'https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category',
+    params={'url': encoded_url, 'token': api_key}
+)
+
+print("URL Param Response:")
+print(url_param_response.json())
+
+# Using Header
+headers = {
+    'X-Api-Key': api_key
+}
+header_response = requests.get(
+    'https://express-scraper-api.vercel.app/api/v1/proxysites.ai/category',
+    headers=headers,
+    params={'url': encoded_url}
+)
+
+print("Header Response:")
+print(header_response.json())
+
 ```
 
 ## Dependencies

@@ -3,6 +3,7 @@ import { wordpressTags } from '@/app/api/v1/wordpress/tags';
 import { startWatcher } from '@/app/lib/watcher';
 import express, { Application } from 'express';
 import logger from 'morgan';
+import { googleSerp } from './api/v1/google/serp';
 import { authByApiKey } from './middleware/authByApiKey';
 const responseTime = require('response-time');
 
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/api/v1/google/serp', googleSerp);
 app.use('/api/v1/wordpress.com/tags', wordpressTags);
 app.use('/api/v1/proxysites.ai/category', proxysiteAiCategory);
 

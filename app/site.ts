@@ -3,7 +3,11 @@
  * Do not modify this file. It is auto-generated.
  *
 */
-export const scrapingSites = ["proxysitesAi","wordpressCom","wordpressOrg"] as const;
+export const scrapingSites = ["google","proxysitesAi","wordpressCom","wordpressOrg"] as const;
+
+// google
+export const scrapingGooglePages = ["desktopSerp"] as const;
+export type ScrapingGooglePage = typeof scrapingGooglePages[number];
 
 // proxysitesAi
 export const scrapingProxysitesAiPages = ["category", "topic"] as const;
@@ -19,9 +23,10 @@ export type ScrapingWordpressOrgPage = typeof scrapingWordpressOrgPages[number];
 
 // types
 export type ScrapingSite = typeof scrapingSites[number];
-export type ScrapingPage = ScrapingProxysitesAiPage | ScrapingWordpressComPage | ScrapingWordpressOrgPage;
+export type ScrapingPage = ScrapingGooglePage | ScrapingProxysitesAiPage | ScrapingWordpressComPage | ScrapingWordpressOrgPage;
 
 export const sites: Record<ScrapingSite, readonly any[]> = {
+  google: scrapingGooglePages, 
   proxysitesAi: scrapingProxysitesAiPages, 
   wordpressCom: scrapingWordpressComPages, 
   wordpressOrg: scrapingWordpressOrgPages

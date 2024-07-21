@@ -1,0 +1,235 @@
+regexToI: &regexToI
+  regex: '[^\d]'
+  replace:
+regexToF: &regexToF
+  regex: '[^\d\.]'
+  replace:
+
+regexToK: &regexToK
+  regex: 'K'
+  replace: "000"
+
+regexToM: &regexToM
+  regex: 'M'
+  replace: "000000"
+  
+regexToB: &regexToB
+  regex: 'B'
+  replace: "000000000"
+
+# string to int
+# eg. 1.1K will be 1100
+toI: &toI
+  - <<: *regexToK
+  - <<: *regexToM
+  - <<: *regexToB
+  - <<: *regexToI
+
+# serp item source
+# ====================================
+source: &source
+  wrapper:
+    list: false
+    selector: a[jsname="UWckNb"]
+    normal:
+      title: 
+        selector: h3
+      name:
+        selector: a[jsname="UWckNb"] span.VuuXrf
+      display_link:
+        selector: a[jsname="UWckNb"] .byrV5b cite
+      link:
+        selector: SELF
+        attr: href
+
+link: &link
+  selector: a
+  attr: href
+
+rich_snippet: &rich_snippet
+  wrapper:
+    list: false
+    selector: SELF
+    normal:
+      rated:
+        wrapper:
+          list: false
+          selector: div[data-snf="mCCBcf"]
+          other_types:
+            - name: store
+              validate:
+                selector: span.z3HNkc.fUNJzc
+            - name: normal
+              validate:
+                selector: span.z3HNkc:not(.fUNJzc)
+          store:
+            link:
+              <<: *link
+            label:
+              selector: span[aria-label]
+              attr: aria-label
+            rating:
+              to_f:
+              selector: span[aria-hidden]
+            reviews:
+              selector: a
+              to_i:
+              after_regular: *toI 
+
+            reviews_origin:
+              selector: a
+          normal:
+            display_price:
+              selector: span.LI0TWe.wHYlTd
+            rating:
+              selector: div > span:nth-child(2)
+              to_f:
+              after_regular:
+                - <<: *regexToF
+            label:
+              selector: span[aria-label]
+              attr: aria-label
+            reviews:
+              selector: div > span:nth-child(3)
+              to_i:
+              after_regular: *toI
+            reviews_origin:
+              selector: div > span:nth-child(3)
+      extensions:
+        selector: div[data-snf="mCCBcf"]
+
+origin_search_normal: &origin_search_normal
+  other_types:
+    - name: twitter
+      validate:
+        selector: div.g.eejeod
+    - name: site_links
+      validate:
+        selector: .BYM4Nd
+    - name: video
+      validate:
+        selector: div[jscontroller="rTuANe"]
+        except: '[jscontroller="UzbKLd"]'
+    - name: book
+      validate:
+        selector: div.ChPIuf a[href*="tbm=bks"]
+    - name: normal
+      validate:
+        selector: .g
+        except: product-viewer-group
+  normal:
+    title:
+      selector: .yuRUbf a[jsname="UWckNb"] h3
+    snippet:
+      selector: div[data-snf="nke7rc"]
+      attr: html
+      to_markdown: true
+    source:
+      <<: *source
+    thumbnail:
+      selector: div[data-snf="Vjbam"] img
+      attr: src
+    snippet_highlighted_words:
+      selector: em
+      is_array: true
+    rich_snippet:
+      <<: *rich_snippet
+    links:
+      wrapper:
+        list: true
+        selector:  div[data-snf="gdePb"] a
+        normal:
+          title: 
+            selector: SELF
+          link:
+            selector: SELF
+            attr: href
+
+
+# Main
+# ====================================================
+# ====================================================
+tree:
+  url:
+    match: https://www.google.com/search
+    params: 
+      q:
+        name: query
+        required: true
+      gl:
+        name: Country Code
+      hl:
+        name: lang code
+      num:
+        name: serp results
+      start:
+        name: offset
+
+  nodes:
+    meta:
+      wrapper:
+        list: false
+        selector: body
+        normal:
+          query_displayed:
+            selector: '#tsf textarea'
+          result_stats:
+            wrapper:
+              list: false
+              selector: div#result-stats
+              normal:
+                total_results:
+                  selector: SELF
+                  attr: html
+                  after_regular:
+                    - regex: '<nobr>.*</nobr>'
+                      replace:
+                    - regex: '[^\d]'
+                      replace:
+                time_taken_displayed:
+                  selector: nobr
+                  after_regular:
+                    - regex: '[^\d\.]'
+                      replace:
+    origin_results:
+      wrapper:
+        list: false
+        selector: div[id="rcnt"]
+        other_types:
+          - name: tablist
+            validate:
+              selector: div.XqFnDf [role="tablist"]
+          - name: store
+            rename: normal
+            validate:
+              selector: '#rso div.fKw1wf'
+        tablist:
+          tabs:
+            selector: span[jsname="AznF2e"]
+            is_array: true
+          results:
+            wrapper:
+              remove_children_node:
+                selector: .LEwnzc.Sqrs4e
+              position: true
+              list: true
+              selector: '#rso > .MjjYud, #Odp5De, #rso > .ULSxyf .TzHB6b'
+              <<: *origin_search_normal
+        store:
+          results:
+            wrapper:
+              remove_children_node:
+                selector: .LEwnzc.Sqrs4e
+              position: true
+              list: true
+              selector: '#rso > .MjjYud, #Odp5De, #rso > .ULSxyf .TzHB6b'
+              <<: *origin_search_normal
+        normal:
+          results:
+            wrapper:
+              remove_children_node:
+                selector: .LEwnzc.Sqrs4e
+              position: true
+              list: true
+              selector: '#rso > .MjjYud, #rso div > .MjjYud, #Odp5De'
+              <<: *origin_search_normal

@@ -2,7 +2,7 @@ export const devices = ["desktop", "mobile"] as const;
 export type Device = typeof devices[number];
 
 export const appConfig = {
-  appName: "Express Scraper",
+  appName: "Express Scraper API",
   devices
 }
 
@@ -31,8 +31,8 @@ export const scrapingOptions = ({
   }
 
   // Production proxy
-  if (process.env.PROXYY) {
-    options["proxyUrl"] = process.env.PROXYY;
+  if (process.env.HTTP_PROXYY) {
+    options["proxyUrl"] = process.env.HTTP_PROXYY;
   }
   return options
 }
